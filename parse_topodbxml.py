@@ -91,6 +91,9 @@ for child in root:
         elif len(child) == 6:
             pdb_id = str(child[1][0].attrib).split("'")[-2]
             Topology = (child[3])
+            chain_id = str(child[1][0][2][0].attrib).split("'")[-2]
+            pdb_id = pdb_id + '_' + chain_id
+            print(pdb_id)
 
             Topology_annotation = (child[4][2])
             #I have no clue why the chunk below seems to work, it is identical to the chunck below but without it the pdb_id isnt recognized

@@ -1,3 +1,18 @@
+import xml.etree.ElementTree as ET
+#read and install the modules for .xml reading
+tree = ET.parse('topdb_all.xml.1')
+root = tree.getroot()
+#what this function does is that it reads the sequence and the topology data from xml and then parses out the TM sequence
+def get_membrane_sequence(sequence,membrane_annotation):
+    #keep in mind that the pdb starts counting at 1 but python counts at 0 and you would need to include the first residue of the count as well
+    #so interval should be [begin-1: end]
+    begin = int(membrane_annotation.split(" '")[1].split("',")[0])-1
+    end = int(membrane_annotation.split(" '")[3].split("',")[0])
+    part_sequence = sequence[begin:end]
+    return(part_sequence)
+
+
+
 print(len(root))
 alpha_count = 0
 total_count = 0

@@ -29,6 +29,14 @@ tm_count = 0
 
 #the code cant tell apart chains yet
 
+
+membrane_data = '/nesi/nobackup/uc04105/PDB_alpha/pdb_chain_id_mebrane_data.json'
+with open('ecod_data.json') as json_data:
+    ecod_info_dict = json.load(json_data)
+    json_data.close()
+beta_list =['beta meanders', 'beta complex topology', 'beta barrels', 'beta sandwiches' , 'beta duplicates or obligate multimers', '']
+
+
 for child in root:
     membrane_protein_flag = False
     
@@ -59,46 +67,51 @@ for child in root:
             chain_id = str(child[1][0][2][0].attrib).split("'")[-2]
             pdb_id = pdb_id + '_' + chain_id
 
-            
-            #small edit to topology annotation here
-            Topology_annotation = (child[6][2])
-
-            sequence = str(child[2][0].text)
-            sequence = (sequence.replace(' ', '').replace('\n', ''))
-            
-            tm_count = tm_count + 1
-            
-            #from the membrane annotation we now retrieve the start and end sites of the membrane 
-            for entry in Topology:
-                membrane_type = entry.text.split(';')[0]
-                list_membr_type.append(membrane_type)
-                membrane_type_dict[pdb_id] = membrane_type
-
-            
-            
-            for topology_annot in Topology_annotation:
-                annotation = str(topology_annot.attrib)
-                if 'Membrane' in annotation:
-                    membrane_protein_flag = True
-                    membrane_annotation = annotation
-                    tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
-                    #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
-            #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
-
-            if membrane_protein_flag == True:
-                #write fl file
-                fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + sequence + '\n'
-                with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
-                    ffl.write(fasta_output)
-                ffl.close()
-
-                #write atm
-                fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
-                with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
-                    atm.write(fasta_output)
-                atm.close()
+            #make sure it is not an ecod
+            if pdb_id in ecod_info_dict:
+                if ecod_info_dict[pdb_id][-1] not in beta_list:
+    
+                    #small edit to topology annotation here
+                    Topology_annotation = (child[6][2])
+        
+                    sequence = str(child[2][0].text)
+                    sequence = (sequence.replace(' ', '').replace('\n', ''))
+                    
+                    tm_count = tm_count + 1
+                    
+                    #from the membrane annotation we now retrieve the start and end sites of the membrane 
+                    for entry in Topology:
+                        membrane_type = entry.text.split(';')[0]
+                        list_membr_type.append(membrane_type)
+                        membrane_type_dict[pdb_id] = membrane_type
+        
+                    
+                    
+                    for topology_annot in Topology_annotation:
+                        annotation = str(topology_annot.attrib)
+                        if 'Membrane' in annotation:
+                            
+                            membrane_protein_flag = True
+                            membrane_annotation = annotation
+                            tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
+                            #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
+                    #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
+        
+                    if membrane_protein_flag == True:
+                        #write fl file
+                        id_list.append(pdb_id)
+                        fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + sequence + '\n'
+                        with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
+                            ffl.write(fasta_output)
+                        ffl.close()
+        
+                        #write atm
+                        fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
+                        with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
+                            atm.write(fasta_output)
+                        atm.close()
 
         
         elif len(child) == 7:
@@ -107,97 +120,102 @@ for child in root:
             Topology = (child[3])
             chain_id = str(child[1][0][2][0].attrib).split("'")[-2]
             pdb_id = pdb_id + '_' + chain_id
+            if pdb_id in ecod_info_dict:
+                if ecod_info_dict[pdb_id][-1] not in beta_list:
 
+                    #small edit to topology annotation here
+                    Topology_annotation = (child[5][2])
             
-            #small edit to topology annotation here
-            Topology_annotation = (child[5][2])
-    
-
-            sequence = str(child[2][0].text)
-            sequence = (sequence.replace(' ', '').replace('\n', ''))
-            
-            tm_count = tm_count + 1
-
-            #from the membrane annotation we now retrieve the start and end sites of the membrane 
-            for entry in Topology:
-                membrane_type = entry.text.split(';')[0]
-                list_membr_type.append(membrane_type)
-                membrane_type_dict[pdb_id] = membrane_type
         
-
-            
-            for topology_annot in Topology_annotation:
-                annotation = str(topology_annot.attrib)
-                if 'Membrane' in annotation:
-                    membrane_protein_flag = True
-                    membrane_annotation = annotation
-                    tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
-                    #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
-            #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
-
-            if membrane_protein_flag == True:
-                #write fl file
-                fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + sequence + '\n'
-                with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
-                    ffl.write(fasta_output)
-                ffl.close()
-
-                #write atm
-                fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
-                with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
-                    atm.write(fasta_output)
-                atm.close()
-            
+                    sequence = str(child[2][0].text)
+                    sequence = (sequence.replace(' ', '').replace('\n', ''))
+                    
+                    tm_count = tm_count + 1
+        
+                    #from the membrane annotation we now retrieve the start and end sites of the membrane 
+                    for entry in Topology:
+                        membrane_type = entry.text.split(';')[0]
+                        list_membr_type.append(membrane_type)
+                        membrane_type_dict[pdb_id] = membrane_type
+                
+        
+                    
+                    for topology_annot in Topology_annotation:
+                        annotation = str(topology_annot.attrib)
+                        if 'Membrane' in annotation:
+                            membrane_protein_flag = True
+                            membrane_annotation = annotation
+                            tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
+                            #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
+                    #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
+        
+                    if membrane_protein_flag == True:
+                        #write fl file
+                        id_list.append(pdb_id)
+        
+                        fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + sequence + '\n'
+                        with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
+                            ffl.write(fasta_output)
+                        ffl.close()
+        
+                        #write atm
+                        fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
+                        with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
+                            atm.write(fasta_output)
+                        atm.close()
+                
         elif len(child) == 6:
             pdb_id = str(child[1][0].attrib).split("'")[-2]
             Topology = (child[3])
             chain_id = str(child[1][0][2][0].attrib).split("'")[-2]
             pdb_id = pdb_id + '_' + chain_id
-
-
-            Topology_annotation = (child[4][2])
-            #I have no clue why the chunk below seems to work, it is identical to the chunck below but without it the pdb_id isnt recognized
-            #but using this it parses pdbs with len(child[0]) = 4 and 5, without issues. 
-            sequence = str(child[2][0].text)
-            sequence = (sequence.replace(' ', '').replace('\n', ''))
-
-            tm_count = tm_count + 1
-            for entry in Topology:
-                membrane_type = entry.text.split(';')[0]
-                list_membr_type.append(membrane_type)
-                membrane_type_dict[pdb_id] = membrane_type
-                    #from the membrane annotation we now retrieve the start and end sites of the membrane 
-
+            if pdb_id in ecod_info_dict:
+                if ecod_info_dict[pdb_id][-1] not in beta_list:
+    
+                    Topology_annotation = (child[4][2])
+                    #I have no clue why the chunk below seems to work, it is identical to the chunck below but without it the pdb_id isnt recognized
+                    #but using this it parses pdbs with len(child[0]) = 4 and 5, without issues. 
+                    sequence = str(child[2][0].text)
+                    sequence = (sequence.replace(' ', '').replace('\n', ''))
+        
+                    tm_count = tm_count + 1
+                    for entry in Topology:
+                        membrane_type = entry.text.split(';')[0]
+                        list_membr_type.append(membrane_type)
+                        membrane_type_dict[pdb_id] = membrane_type
+                            #from the membrane annotation we now retrieve the start and end sites of the membrane 
+        
+                                #write fl file
+                    fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
+                    fasta_output = fasta_header_fl + '\n' + sequence + '\n'
+                    
+                    for topology_annot in Topology_annotation:
+                        annotation = str(topology_annot.attrib)
+                        if 'Membrane' in annotation:
+                            membrane_protein_flag = True
+                            membrane_annotation = annotation
+                            tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
+                            #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
+                    #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
+        
+                    
+                    if membrane_protein_flag == True:
                         #write fl file
-            fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
-            fasta_output = fasta_header_fl + '\n' + sequence + '\n'
-            
-            for topology_annot in Topology_annotation:
-                annotation = str(topology_annot.attrib)
-                if 'Membrane' in annotation:
-                    membrane_protein_flag = True
-                    membrane_annotation = annotation
-                    tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
-                    #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
-            #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
-
-            
-            if membrane_protein_flag == True:
-                #write fl file
-                fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + sequence + '\n'
-                with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
-                    ffl.write(fasta_output)
-                ffl.close()
-
-                #write atm
-                fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
-                fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
-                with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
-                    atm.write(fasta_output)
-                atm.close()
+                        id_list.append(pdb_id)
+                        fasta_header_fl = '>{}_fl_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + sequence + '\n'
+                        with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
+                            ffl.write(fasta_output)
+                        ffl.close()
+        
+                        #write atm
+                        fasta_header_fl = '>{}_tm_membranetype_{}'.format(pdb_id, membrane_type) 
+                        fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
+                        with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
+                            atm.write(fasta_output)
+                        atm.close()
                 
             #if len(tm_sequence)/len(sequence) > 0.5:
             #    print(pdb_id, (len(tm_sequence)/len(sequence)), len(sequence), len(tm_sequence))
@@ -209,40 +227,43 @@ for child in root:
             Topology = (child[3])
             chain_id = str(child[1][0][2][0].attrib).split("'")[-2]
             pdb_id = pdb_id + '_' + chain_id
-
-            if (len(child[4])) <=  2:
-                #this  means no transmembrane elemtns
-                pass
-            else:
-                sequence = str(child[2][0].text)
-                sequence = (sequence.replace(' ', '').replace('\n', ''))
-              #  print(child[4][1].text)
-              #  print(child[4][0].text)
-                Topology_annotation = (child[4])
-
-                for topology_annot in Topology_annotation:
-                    annotation = str(topology_annot.attrib)
-                    if 'Membrane' in annotation:
-                        membrane_protein_flag = True
-                        membrane_annotation = annotation
-                        tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
-                        #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
-                #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
-
-                if membrane_protein_flag == True:
-                    #write fl file
-                    fasta_header_fl = '>{}_fl'.format(pdb_id) 
-                    fasta_output = fasta_header_fl + '\n' + sequence + '\n'
-                    with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
-                        ffl.write(fasta_output)
-                    ffl.close()
+            if pdb_id in ecod_info_dict:
+                if ecod_info_dict[pdb_id][-1] not in beta_list:
     
-                    #write atm
-                    fasta_header_fl = '>{}_tm'.format(pdb_id) 
-                    fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
-                    with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
-                        atm.write(fasta_output)
-                    atm.close()
+                    if (len(child[4])) <=  2:
+                        #this  means no transmembrane elemtns
+                        pass
+                    else:
+                        sequence = str(child[2][0].text)
+                        sequence = (sequence.replace(' ', '').replace('\n', ''))
+                      #  print(child[4][1].text)
+                      #  print(child[4][0].text)
+                        Topology_annotation = (child[4])
+        
+                        for topology_annot in Topology_annotation:
+                            annotation = str(topology_annot.attrib)
+                            if 'Membrane' in annotation:
+                                membrane_protein_flag = True
+                                membrane_annotation = annotation
+                                tm_sequence = tm_sequence + (get_membrane_sequence(sequence, membrane_annotation))
+                                #print('>{}_membrane_type:{}_aTM_count:{}'.format(pdb_id, membrane_type, tm_count))
+                        #print(len(tm_sequence), len(sequence), len(tm_sequence)/len(sequence))
+        
+                        if membrane_protein_flag == True:
+                            #write fl file
+                            id_list.append(pdb_id)
+                            fasta_header_fl = '>{}_fl'.format(pdb_id) 
+                            fasta_output = fasta_header_fl + '\n' + sequence + '\n'
+                            with open('{}/{}_fl.fasta'.format(writing_dir_fl, pdb_id), 'w') as ffl: #Fasta Full Length (FFL)
+                                ffl.write(fasta_output)
+                            ffl.close()
+            
+                            #write atm
+                            fasta_header_fl = '>{}_tm'.format(pdb_id) 
+                            fasta_output = fasta_header_fl + '\n' + tm_sequence + '\n'
+                            with open('{}/{}_tm.fasta'.format(writing_dir_tm, pdb_id), 'w') as atm: #Alpha tm (Atm)
+                                atm.write(fasta_output)
+                            atm.close()
                 
         #this is in here to alarm you if any pdb entries are missed by the code
         elif len(child) < 5:
@@ -262,7 +283,8 @@ print(len(list_membr_type))
 
 from collections import Counter
 Counter(list_membr_type)
-
+print(len(id_list))
+print(len(set(id_list)))
 import json
 with open('pdb_chain_id_mebrane_data.json', 'w') as f:
     json.dump(membrane_type_dict, f)

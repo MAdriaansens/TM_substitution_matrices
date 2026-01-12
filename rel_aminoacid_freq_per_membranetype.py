@@ -13,7 +13,7 @@ atm_dir = '/nesi/nobackup/uc04105/PDB_alpha/tma_topdb'
 
 #this function (in a laborius manner) calculates the relative frequency for each amino acid 
 def return_line_of_frequencies(input_list, name):
-    #the 0.000000000001, addition is done to ensure the calculation still work despite some amino acids possibly being absent
+    #the 1, addition is done to ensure the calculation still work despite some amino acids possibly being absent
     total = len(input_list)
     if total != 0:
         A = str((input_list.count('A') + 1))

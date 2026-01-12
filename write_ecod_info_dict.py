@@ -32,7 +32,7 @@ with open('ecod.v293.domains.txt', 'r') as lines:
                 Architecture = line.split('\t')[7]
                 #a family id 
                 f_name = line.split('\t')[11]
-                info_list = (pdb_id,family_id, f_name, Architecture)
+                info_list = (pdb_id,family_id, f_name, T_group, H_group, X_group, Architecture)
                 ecod_info_dict[pdb_id] = info_list
             #if it just the idenvidual chain then we write it like this:      
             else:
@@ -47,7 +47,7 @@ with open('ecod.v293.domains.txt', 'r') as lines:
                 
                 f_name = line.split('\t')[12]
                 #concatenate all the info and save into dictionairy.
-                info_list = (pdb_id,family_id, f_name, Architecture)
+                info_list = (pdb_id,family_id, f_name, T_group, H_group, X_group, Architecture)
                 ecod_info_dict[pdb_id] = info_list
 with open('ecod_data.json', 'w') as f:
     json.dump(ecod_info_dict, f)

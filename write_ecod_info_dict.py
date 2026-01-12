@@ -25,6 +25,9 @@ with open('ecod.v293.domains.txt', 'r') as lines:
                 #so for 2nmz_A, its family_id = 1.1.1.3, 1 1 (structural similarity). = cradle loop barrel, 
                 #1 expected homology = RIFT-related, 1 topological connection = Acid protease, 3 family = RVP. 
                 family_id = line.split('\t')[3]
+                X_group=line.split('\t')[8]
+                H_group=line.split('\t')[9]
+                T_group=line.split('\t')[10]
                 #I also append the structural architecture to this.
                 Architecture = line.split('\t')[7]
                 #a family id 
@@ -38,9 +41,11 @@ with open('ecod.v293.domains.txt', 'r') as lines:
                 family_id = line.split('\t')[3]
                 
                 Architecture = line.split('\t')[8]
-
+                X_group=line.split('\t')[9]
+                H_group=line.split('\t')[10]
+                T_group=line.split('\t')[11]
                 
-                f_name = line.split('\t')[11]
+                f_name = line.split('\t')[12]
                 #concatenate all the info and save into dictionairy.
                 info_list = (pdb_id,family_id, f_name, Architecture)
                 ecod_info_dict[pdb_id] = info_list

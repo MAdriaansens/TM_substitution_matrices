@@ -1,0 +1,63 @@
+
+
+
+header = '>3RFR_1|Chains A, J[auth E], K[auth I]|PmoB|Methylocystis sp. M (51782)'
+sequence_pmoB = 'MKKLVKLAAFGAAAAVAATLGAIAPASAHGEKSQQAFLRMRTLNWYDVQWSKTTVNVNEEMILSGKVHVFSAWPQAVANPRVSFLNAGEPGPVLVRTAQFIGEQFAPRSVSLEIGKDYAFSINLRGRRAGRWHVHAQINVEGGGPIIGPGQWIEIKGDMKDFTDPVTLLDGSTVDLENYGISRIYAWHLPWLAVGAAWILFWFIRKGIIASYVRVAEGRPDDVIGDDDRRIGAIVLALTILATIVGYAVTNSTFPRTIPLQAGLQKPLTPIETEGTVGVGKEQVTTELNGGVYKVPGRELTINVKVKNGTSQPVRLGEYTAAGLRFLNPTVFTQKPDFPDYLLADRGLSNDDVIAPGESKEIVVKIQDARWDIERLSDLAYDTDSQVGGLLFFFTPDGKRFAAEIGGPVIPKFVAGDMP'
+print(len(sequence_pmoB))
+
+#3RFR says it is TM 185-204 / 231-249
+
+gap = '-'
+
+Sequence_pmoB = gap*180+ sequence_pmoB[180:205] + gap*18 + sequence_pmoB[223:250] + 169*gap
+
+print(Sequence_pmoB)
+pmoB_tm_3RFR = '>3RFR_1|Chains A, J[auth E], K[auth I]|PmoB|Methylocystis sp. M (51782)_TMelements' + '\n' + Sequence_pmoB + '\n'
+print(Sequence_pmoB[223])
+#test if it still matches
+#print(Sequence_pmoB[180])
+#print(Sequence_pmoB[226])
+header ='>3CHX_1|Chains A, F[auth E], K[auth I]|PmoB|Methylosinus trichosporium (426)'
+
+sequence_pmoB = 'HGEKSQQAFLRMRTLNWYDVKWSKTSLNVNESMVLSGKVHVFSAWPQAVANPKSSFLNAGEPGPVLVRTAQFIGEQFAPRSVSLEVGKDYAFSIDLKARRAGRWHVHAQINVEGGGPIIGPGQWIEIKGDMADFKDPVTLLDGTTVDLETYGIDRIYAWHFPWMIAAAAWILYWFFKKGIIASYLRISEGKDEEQIGDDDRRVGAIVLAVTILATIIGYAVTNSTFPRTIPLQAGLQKPLTPIIEEGTAGVGPHVVTAELKGGVYKVPGRELTIQVKVTNKTDEPLKLGEYTAAGLRFLNPDVFTTKPEFPDYLLADRGLSTDPTPLAPGETKTIEVKVQDARWDIERLSDLAYDTDSQIGGLLMFFSPSGKRYATEIGGPVIPKFVAGDMP'
+print(len(sequence_pmoB))
+pmoB_tm_3CHX = '{}'.format(header) + '\n' + gap*153 + gap*39+ sequence_pmoB[153:174] + gap*26 + sequence_pmoB[200:222] + gap*170 + '\n'
+print(pmoB_tm_3CHX)
+outdir = '/nesi/nobackup/uc04105/PDB_alpha/tm_curated_sequences'
+with open('{}/PmoB_3RFR_3CHX_tm.fasta'.format(outdir), 'w') as output_pmoB:
+    output_pmoB.write(pmoB_tm_3RFR)
+    output_pmoB.write(pmoB_tm_3CHX)
+header = '>3CHX_2|Chains B, G[auth F], L[auth J]|PmoA|Methylosinus trichosporium (426)'
+sequence_pmoA = 'MFTSKSGGAIGPFHSVAEAAGCVKTTDWMFLTLLFLAVLGGYHIHFMLTAGDWDFWVDWKDRRMWPTVVPILGVTFAAAAQAFFWENFKLPFGATFAVSGLLIGEWINRYCNFWGWTYFPISLVFPSALVVPALWLDIIMLLSGSYVITAVVGSLGWGLLFYPNNWPAIAALHQATEQHGQLMSLADLVGFHFVRTSMPEYIRMVERGTLRTFGKEVVPVAAFFSGFVSMMVYFLWWFVGKWYSTTKVIQKI'
+
+
+
+pmoA_tm_seq_3CHX = gap*27+sequence_pmoA[27:53] + gap *11 + sequence_pmoA[64:85] + gap*4 + sequence_pmoA[89:113] + gap*12 + sequence_pmoA[125:168] + gap*32 + sequence_pmoA[199:218] + gap*7 + sequence_pmoA[225:247] + gap*5
+
+print(pmoA_tm_seq_3CHX)
+header = '>3RFR_3|Chains D[auth B], E[auth F], F[auth J]|PmoA|Methylocystis sp. M (51782)'
+sequence_pmoA = 'MSQSKSGGAVGPFNSVAEAAGCVATTDWMLLVLLFFAVLGGYHVHFMLTAGDWDFWVDWKDRRMWPTVLPILGVTFCAASQAFWWVNFRLPFGAVFAVLGLMIGEWINRYVNFWGWTYFPISLVFPSAMIVPAIWLDVILLLSGSYVITAVVGSLGWGLLFYPNNWPAIAAFHQATEQHGQLMTLADLIGLHFVRTSMPEYIRMVERGTLRTFGKDVVPVAAFFSGFVSMMVYFLWWFMGRWYSTTKRIEQI'
+
+pmoA_tm_seq_3RFR = gap*24 +sequence_pmoA[24:55] + gap*17 + sequence_pmoA[62:115] + gap*5 + sequence_pmoA[120] + gap*3 + sequence_pmoA[123:169]+ gap*12 + sequence_pmoA[181:205] + gap*11 + sequence_pmoA[216:245] + gap*6 + sequence_pmoA[-2:]
+print(pmoA_tm_seq_3RFR)
+
+outdir = '/nesi/nobackup/uc04105/PDB_alpha/tm_curated_sequences'
+with open('{}/PmoA_3RFR_3CHX_tm.fasta'.format(outdir), 'w') as output_pmoB:
+    output_pmoB.write(pmoA_tm_seq_3RFR)
+    output_pmoB.write(pmoA_tm_seq_3CHX)
+header = '>3RFR_4|Chains G[auth C], H[auth G], I[auth K]|PmoC|Methylocystis sp. M (51782)'
+sequence_pmoC = 'MSSTTSTAAGAAAEVESVVDLRGMWIGLAVLNVFYLIVRIYEQVFGWRAGLDSFAPEFQTYWMSILWTEIPLELVSGLGLAGYLWKTRDRNVDAVAPREEMRRLVVLVQWLVVYGIAIYWGASFFTEQDGAWHMTVIRDTDFTPSHIIEFYMSYPIYSVIAVGAFFYAKTRIPYFAHGYSLAFLIVAIGPFMIIPNVGLNEWGHTFWFMEELFVAPLHWGFVFFGWMALGVFGVVLQILGRIHALIGKEGVALLTE'
+
+
+
+pmoC_tm_seq_3RFR = 20*gap +  sequence_pmoC[20:46] +  11*gap + sequence_pmoC[57:84] + gap*23 + sequence_pmoC[107:133] + gap*7 + sequence_pmoC[140:167] + gap*12 + sequence_pmoC[179:198] + gap*20 + sequence_pmoC[218:235] + gap*21
+#print(pmoC_tm_seq[218])
+print(pmoC_tm_seq_3RFR)
+header = '>3CHX_3|Chains C, H[auth G], M[auth K]|PmoC|Methylosinus trichosporium (426)'
+sequence_pmoC = 'MSVTTETTAGAAAGSDAIVDLRGMWVGVAGLNIFYLIVRIYEQIYGWRAGLDSFAPEFQTYWLSILWTEIPLELVSGLALAGWLWKTRDRNVDAVAPREELRRHVVLVEWLVVYAVAIYWGASFFTEQDGTWHMTVIRDTDFTPSHIIEFYMSYPIYSIMAVGAFFYAKTRIPYFAHGFSLAFLIVAIGPFMIIPNVGLNEWGHTFWFMEELFVAPLHWGFVFFGWMALGVFGVVLQILMGVKRLIGKDCVAALVG'
+pmoC_tm_seq_3CHX= gap*22 + sequence_pmoC[22:43] + gap*17 + sequence_pmoC[60:82] + gap*27+sequence_pmoC[109:130] +  gap*13 +sequence_pmoC[143:164] + gap*13 + sequence_pmoC[174:197] + gap*22 + sequence_pmoC[217:239] + gap*17
+print(pmoC_tm_seq_3CHX)
+outdir = '/nesi/nobackup/uc04105/PDB_alpha/tm_curated_sequences'
+with open('{}/PmoC_3RFR_3CHX_tm.fasta'.format(outdir), 'w') as output_pmoB:
+    output_pmoB.write(pmoC_tm_seq_3RFR)
+    output_pmoB.write(pmoC_tm_seq_3CHX)

@@ -1,12 +1,11 @@
 import re
 import sys
 
-hit_file = '/home/mad149/00_nesi_projects/uc04105_nobackup/PDB_alpha/HMMalign/protein-matching-AMO_PF12942_alignedPF12942.sthk'
-outfile = '/home/mad149/00_nesi_projects/uc04105_nobackup/PDB_alpha/HMMalign/protein-matching-AMO_PF12942_alignedPF12942_alignment_TMonly.faa'
-# define alignment
+hit_file = '/home/mad149/00_nesi_projects/uc04105_nobackup/PDB_alpha/HMMalign/AMOA_curated_alignedPF12942.sthk'
+outfile='/home/mad149/00_nesi_projects/uc04105_nobackup/PDB_alpha/HMMalign/protein-matching-AMO_PF12942_alignedPF12942_alignment_TMonly.faa'
 alignment={}
 
-
+length=128
 
 # read in alignment
 
@@ -32,33 +31,56 @@ lengthDict={}
 
 for header in alignment.keys():
     lengthDict[len(alignment[header])]=1
-
+print(lengthDict)
 
 
 if len(lengthDict) > 1:
     sys.exit("ERROR! Aligned sequences differ by length")
-#TM residues of Archaea AMOA after Q04507 through TMHMM2.0 on 15th April 2025
+
 TM = []
-TM.extend(list(range(28,50)))
-TM.extend(list(range(64,87)))
-TM.extend(list(range(91,114)))
-TM.extend(list(range(123,143)))
-TM.extend(list(range(147,170)))
-TM.extend(list(range(218,241)))
+TM.extend(list(range(9,11)))
+TM.extend(list(range(27,47)))
+TM.extend(list(range(50,71)))
+TM.extend(list(range(80,100)))
+TM.extend(list(range(105,123)))
 print(TM)
+print(alignment[header][9:11])
+print(alignment[header][27:47])
+
+print(alignment[header][50:71])
+print(alignment[header][80:100])
+print(alignment[header][105:123])
+
+print(alignment[header])
+
+entry = 'MSIFRTEEILKAAKMPPEAVHMSRLIDAVYFPILIILLVGTYHMHFMLLAGDWDFWMDWKDRQWWPVVTPIVGITYCSAIMYYLWVNYRQPFGATLCVVCLLIGEWLTRYWGFYWWSHYPINFVTPGIMLPGALMLDFTLYLTRNWLVTALVGGGFFGLLFYPGNWPIFGPTHLPIVVEGTLLSMADYMGHLYVRTGTPEYVRHIEQGSLRTFGGHTTVIAAFFSAFVSMLMFTVWWYLGKVYCTAFFYVKGKRGRIVHRNDVTAFGEEGFPEGIK'
+residue_num=1
+residue  = ''
+for a in entry:
+    if residue_num in TM:
+        residue += a
+    else:
+        residue += '-'
+    residue_num += 1
+print(residue)
+
+
+
+
 
 with open(outfile, 'w') as out:
     for header in alignment.keys():
-        TM_align = ''
-        residue_num = 1
-        for residue in alignment[header]:
-            if residue_num in TM:
-                TM_align += residue
-            else:
-                TM_align += '-'
-            residue_num = residue_num + 1
-            
-        
-        line = '>' + header.split('|')[0]+ '\n' + TM_align + '\n'
-        print(header.split('|')[0])
-        out.write(line)
+        print(alignment[header])
+        if (len(alignment[header].replace('-', ''))) > length:
+            TM_align = ''
+            residue_num = 1
+            for residue in alignment[header]:
+                if residue_num in TM:
+                    TM_align += residue
+                else:
+                    TM_align += '-'
+                residue_num = residue_num + 1
+            line = '>' + header.split('|')[0] + '\n' + TM_align + '\n'
+            out.write(line)
+        else:
+            pass

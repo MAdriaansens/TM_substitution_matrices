@@ -3,14 +3,14 @@ sequence_pmoC = 'MSSTTSTAAGAAAEVESVVDLRGMWIGLAVLNVFYLIVRIYEQVFGWRAGLDSFAPEFQTYWM
 
 
 
-pmoC_tm_seq_3RFR = header + '\n' +20*gap +  sequence_pmoC[20:46] +  11*gap + sequence_pmoC[57:84] + gap*23 + sequence_pmoC[107:133] + gap*7 + sequence_pmoC[140:167] + gap*12 + sequence_pmoC[179:198] + gap*20 + sequence_pmoC[218:235] + gap*21
+pmoC_tm_seq_3RFR = header + '\n' +20*gap +  sequence_pmoC[20:46] +  11*gap + sequence_pmoC[57:84] + gap*23 + sequence_pmoC[107:133] + gap*7 + sequence_pmoC[140:167] + gap*12 + sequence_pmoC[179:198] + gap*20 + sequence_pmoC[218:235] + gap*21 + '\n'
 #print(pmoC_tm_seq[218])
 print(header)
 print(pmoC_tm_seq_3RFR)
 header = '>3CHX_3|Chains C, H[auth G], M[auth K]|PmoC|Methylosinus trichosporium (426)'
 print(header)
 sequence_pmoC = 'MSVTTETTAGAAAGSDAIVDLRGMWVGVAGLNIFYLIVRIYEQIYGWRAGLDSFAPEFQTYWLSILWTEIPLELVSGLALAGWLWKTRDRNVDAVAPREELRRHVVLVEWLVVYAVAIYWGASFFTEQDGTWHMTVIRDTDFTPSHIIEFYMSYPIYSIMAVGAFFYAKTRIPYFAHGFSLAFLIVAIGPFMIIPNVGLNEWGHTFWFMEELFVAPLHWGFVFFGWMALGVFGVVLQILMGVKRLIGKDCVAALVG'
-pmoC_tm_seq_3CHX= header + '\n' +gap*22 + sequence_pmoC[22:43] + gap*17 + sequence_pmoC[60:82] + gap*27+sequence_pmoC[109:130] +  gap*13 +sequence_pmoC[143:164] + gap*13 + sequence_pmoC[174:197] + gap*22 + sequence_pmoC[217:239] + gap*17
+pmoC_tm_seq_3CHX= header + '\n' +gap*22 + sequence_pmoC[22:43] + gap*17 + sequence_pmoC[60:82] + gap*27+sequence_pmoC[109:130] +  gap*13 +sequence_pmoC[143:164] + gap*13 + sequence_pmoC[174:197] + gap*22 + sequence_pmoC[217:239] + gap*17 + '\n'
 print(pmoC_tm_seq_3CHX)
 import re
 import sys
